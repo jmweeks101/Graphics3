@@ -19,10 +19,14 @@ class base3D():
     def translate(self,x,y):
         pass
 
+    #creates inital 2D shape for 3D object
+    def set2D(self,shape):
+        pass
+
     #makes shape into a cube
     def setCube(self):
-        pass
+        self.set2D("square")
 
     #makes shape into a sphere
     def setSphere(self):
-        pass
+        self.set2D("circle")
