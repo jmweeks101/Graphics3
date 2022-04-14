@@ -23,7 +23,7 @@ def main():
     win.setCoords(0,0,10,10)
 
     test = Rectangle(Point(3,3), Point(6,7))
-    rotate(test,0)
+    rotate(test,40)
 
     test.draw(win)
 
