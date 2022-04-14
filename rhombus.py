@@ -9,14 +9,14 @@ class Rhombus(GraphicsObject):
     #Gets a center point, length, and bottom left angle.
     def __init__(self, center, length, angle):
         #Bottom left point
-        p1 = Point(center.getX() - (length/2), center.getY() - (length/2))
+        self.p1 = Point(center.getX() - (length/2), center.getY() - (length/2))
         #Bottom right point
-        p2 = Point(center.getX() + (length/2), center.getY() - (length/2))
+        self.p2 = Point(center.getX() + (length/2), center.getY() - (length/2))
         #Top left point
-        p3 = Point(p1.getX()+(length*np.cos(np.radians(angle))), p1.getY()+(length*np.sin(np.radians(angle))))
+        p3 = Point(self.p1.getX()+(length*np.cos(np.radians(angle))), self.p1.getY()+(length*np.sin(np.radians(angle))))
         #Top right point
-        p4 = Point(p2.getX()+(length*np.cos(np.radians(angle))), p2.getY()+(length*np.sin(np.radians(angle))))
-        self.points = [p1,p2,p4,p3]
+        p4 = Point(self.p2.getX()+(length*np.cos(np.radians(angle))), self.p2.getY()+(length*np.sin(np.radians(angle))))
+        self.points = [self.p1,self.p2,p4,p3]
         GraphicsObject.__init__(self, ["outline", "width", "fill"])
 
     def clone(self):
