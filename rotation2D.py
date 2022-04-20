@@ -9,7 +9,7 @@ from rhombus import Rhombus
 def rotateRect(shape, degrees):
     p3 = Point(shape.p1.x, shape.p2.y)
     p4 = Point(shape.p2.x, shape.p1.y)
-    points = [p1, p4, p2, p3]
+    points = [shape.p1, p4, shape.p2, p3]
     degrees = np.radians(degrees)
     pivotx, pivoty =  shape.p1.x + ((shape.p2.x-shape.p1.x)/2), shape.p1.y + ((shape.p2.y-shape.p1.y)/2)
     newpoints = []
@@ -17,7 +17,7 @@ def rotateRect(shape, degrees):
         p = np.matrix([[p.getX()-pivotx], [p.getY()-pivoty]])
         matrix = np.matrix([[np.cos(degrees), -np.sin(degrees)], [np.sin(degrees), np.cos(degrees)]])
         newp = np.matmul(matrix, p)
-        newpoints.append(newp[0,0]+pivotx, newp[1,0]+pivoty)
+        newpoints.append(Point(newp[0,0]+pivotx, newp[1,0]+pivoty))
     shape = Polygon(newpoints)
     return shape
 
@@ -28,7 +28,7 @@ def main():
     win.setCoords(0,0,10,10)
 
     test = Rectangle(Point(3,3), Point(6,7))
-    test = rotate(test,40)
+    test = rotateRect(test,0)
 
     test.draw(win)
 
