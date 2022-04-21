@@ -1,34 +1,38 @@
-from rhombus import Rhombus
-from rotation2D import *
+from parallelogram import Parallelogram
 
 #base shape class, will define all 3d shape subclasses
 class base3D:
     #user gives base shape and dimensions to contain 3D shape
-    def __init__(win,base,width,height,depth):
+    def __init__(win,baseCenter,faces):
         self.win = win
-        self.base = base
-        self.x = x
-        self.y = y
-        self.z = z
-        #faces list will contain 2D shapes
-        self.faces = [base]
+        self.baseCenter = baseCenter
+        self.faces = []
 
     #returns enter of object
     def getCenter(self):
-        pass
+        #take center of each face and make a polygon from those points
+        #then find center of that new polygon
+        ps = []
+        for face in self.faces:
+            ps.append(face.getCenter())
+        x = Polygon(ps)
+        return x.getCenter()
 
     #translate shape in x,y direction
     def translate(self,x,y):
+        self.undrawLabel()
         for face in self.faces:
             face.move(x,y)
 
     #makes pbject apear closer or further away(shrink or grow shape)
     def zoom(self,z):
+        self.undrawLabel()
         pass
 
-    #returns a clone of the 3D shape
-    def clone(self):
-        return base3D(self.win,self.base.clone(),self.x,self.y,self.z)
+    #rotate the object in 3D space
+    def rotate(self,thetaX,thetaY,thetaZ):
+        self.undrawLabel()
+        pass
 
     #draw shape to window
     def show(self):
@@ -37,6 +41,7 @@ class base3D:
 
     #undraw shape from window
     def hide(self):
+        self.undrawLabel()
         for face in self.faces:
             face.undraw()
 
@@ -66,12 +71,21 @@ class base3D:
     def undrawLabel(self):
         self.label.undraw()
 
-#class to create a prisim from base 2D shape
+#class to create a prisim
 class Prisim(base3D):
-    def __init__(self):
-        pass
+    def __init__(win,baseCenter,width,height,depth):
+        self.base = Parallelogram.create1()
+        self.faces.append(self.base)
+        self.faces.append(Parallelogram.create2())
+        self.faces.append(Parallelogram.create3())
+        #create base shape
+        base3D.__init__(win,baseCenter,self.faces)
 
-#class to create a pyramid from base 2D shape
+    #returns a clone of the prisim
+    def clone(self):
+        return Prisim(self.win,self.baseCenter,self.x,self.y,self.z)
+
+#class to create a pyramid
 class Pyramid(base3D):
     def __init__(self):
         pass
