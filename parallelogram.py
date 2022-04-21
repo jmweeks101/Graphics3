@@ -4,23 +4,23 @@ from graphics import *
 
 import numpy as np
 
-class Rhombus(GraphicsObject):
+class Parallelogram(GraphicsObject):
     #Uses the already existing polygon class to create a rhombus.
     #Gets a center point, length, and bottom left angle.
-    def __init__(self, center, length, angle):
+    def __init__(self, center, length, width, angle):
         #Bottom left point
-        self.p1 = Point(center.getX() - (length/2), center.getY() - (length/2))
+        self.p1 = Point(center.getX() - (width/2), center.getY() - (length/2))
         #Bottom right point
-        self.p2 = Point(center.getX() + (length/2), center.getY() - (length/2))
+        self.p2 = Point(center.getX() + (width/2), center.getY() - (length/2))
         #Top left point
-        p3 = Point(self.p1.getX()+(length*np.cos(np.radians(angle))), self.p1.getY()+(length*np.sin(np.radians(angle))))
+        self.p3 = Point(self.p1.getX()+(length*np.cos(np.radians(angle))), self.p1.getY()+(length*np.sin(np.radians(angle))))
         #Top right point
-        p4 = Point(self.p2.getX()+(length*np.cos(np.radians(angle))), self.p2.getY()+(length*np.sin(np.radians(angle))))
-        self.points = [self.p1,self.p2,p4,p3]
+        self.p4 = Point(self.p2.getX()+(length*np.cos(np.radians(angle))), self.p2.getY()+(length*np.sin(np.radians(angle))))
+        self.points = [self.p1,self.p2,self.p4,self.p3]
         GraphicsObject.__init__(self, ["outline", "width", "fill"])
 
     def clone(self):
-        other = Rhombus(*self.points)
+        other = Parallelogram(*self.points)
         other.config = self.config.copy()
         return other
 
@@ -40,13 +40,16 @@ class Rhombus(GraphicsObject):
         args.append(options)
         return GraphWin.create_polygon(*args)
 
+    def create3(self):
+        pass
+
 
 def main():
     win = GraphWin('GraphicsGroup', 600,600)
     win.setBackground('white')
     win.setCoords(0,0,10,10)
 
-    test = Rhombus(Point(5,5), 2, 120)
+    test = Parallelogram(Point(3,5), 2, 4, 90)
     test.draw(win)
     test.setFill('black')
 
