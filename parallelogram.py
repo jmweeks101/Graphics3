@@ -41,7 +41,10 @@ class Parallelogram(GraphicsObject):
         return GraphWin.create_polygon(*args)
 
     def create3(self):
-        pass
+        frontface = Parallelogram(Point(5,5), l, w, 90)
+        topface = Parallelogram(Point(test.p3.x+(w/2), test.p3.y+(np.sin(np.radians(27.5))*l/2)), np.sin(np.radians(27.5))*l, w, 45)
+        sideface = Polygon(test.p2, Point(test2.p4.x, test.p2.y+test2.p4.y-test.p4.y), test2.p4, test.p4)
+        return [frontface, topface, sideface]
 
 
 def main():

@@ -41,14 +41,14 @@ def main():
 
     # test = Rectangle(Point(3,3), Point(6,7))
     # test = rotateRect(test,45)
-    l, w, h = 3,3,3
+    l, w, h = 5, 6, 9
     test = Parallelogram(Point(5,5), l, w, 90)
     test.draw(win)
-    test2 = Parallelogram(Point(test.p3.x+(w/2), test.p3.y+(np.sin(np.radians(30))*l/2)), np.sin(np.radians(30))*w, l, 30)
+    test2 = Parallelogram(Point(test.p3.x+(w/2), test.p3.y+(np.sin(np.radians(27.5))*l/2)), np.sin(np.radians(27.5))*l, w, 45)
     test2.draw(win)
-    test3 = Polygon(test.p2, Point(test2.p4.x, test.p2.y+np.sin(np.radians(45)))*h, test2.p4, test.p4)
+    test3 = Polygon(test.p2, Point(test2.p4.x, test.p2.y+test2.p4.y-test.p4.y), test2.p4, test.p4)
     test3.draw(win)
-
+#test2.p4.x, test.p2.y+np.sin(np.radians(45))*h
 
     win.getMouse()
 
