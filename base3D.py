@@ -73,13 +73,9 @@ class base3D:
 
 #class to create a prisim
 class Prisim(base3D):
-    def __init__(win,baseCenter,width,height,depth):
-        self.base = Parallelogram.create1()
-        self.faces.append(self.base)
-        self.faces.append(Parallelogram.create2())
-        self.faces.append(Parallelogram.create3())
+    def __init__(self,win,baseCenter,width,height,depth):
         #create base shape
-        base3D.__init__(win,baseCenter,self.faces)
+        base3D.__init__(win,baseCenter,Parallelogram.create3(baseCenter,width,height,90))
 
     #returns a clone of the prisim
     def clone(self):

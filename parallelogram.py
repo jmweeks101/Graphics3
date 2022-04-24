@@ -1,7 +1,4 @@
-import sys
-sys.path.insert(0, 'C:\\Users\\joshm\\OneDrive\\Documents\\Computer Science')
 from graphics import *
-
 import numpy as np
 
 class Parallelogram(GraphicsObject):
