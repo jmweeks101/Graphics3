@@ -50,10 +50,9 @@ def main():
     win.setBackground('white')
     win.setCoords(0,0,10,10)
 
-    test = Parallelogram(Point(3,5), 2, 4, 90)
-    test.draw(win)
-    test.setFill('black')
-
+    faces = create3(2,2,2, Point(5,5))
+    for face in faces:
+        face.draw(win)
     win.getMouse()
 
 
