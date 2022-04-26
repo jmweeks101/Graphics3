@@ -3,9 +3,8 @@ from parallelogram import create3
 #base shape class, will define all 3d shape subclasses
 class base3D:
     #user gives base shape and dimensions to contain 3D shape
-    def __init__(win,baseCenter,faces):
+    def __init__(self,win,faces):
         self.win = win
-        self.baseCenter = baseCenter
         self.faces = faces
 
     #returns enter of object
@@ -74,17 +73,28 @@ class base3D:
 #class to create a prisim
 class Prisim(base3D):
     def __init__(self,win,baseCenter,width,height,depth):
+        self.win = win
+        self.baseCenter = baseCenter
+        self.width = width
+        self.height = height
+        self.depth = depth
         #create base shape
-        base3D.__init__(win,baseCenter,create3(depth,width,height,baseCenter))
+        base3D.__init__(self,self.win,create3(self.depth,self.width,self.height,self.baseCenter))
 
     #returns a clone of the prisim
     def clone(self):
-        return Prisim(self.win,self.baseCenter,self.x,self.y,self.z)
+        return Prisim(self.win,self.baseCenter,self.width,self.height,self.depth)
 
 #class to create a pyramid
 class Pyramid(base3D):
-    def __init__(self):
-        pass
+    def __init__(self,win,topPoint,height,baseSides,baseSideLength):
+        self.win = win
+        self.topPoint = topPoint
+        self.height = height
+        self.baseSides = baseSides
+        self.baseSideLength = baseSideLength
+        #create base shape
+        base3D.__init__(self,self.win,createPryamid())
 
 #class to create a sphere
 class Sphere(base3D):
