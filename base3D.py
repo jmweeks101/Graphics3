@@ -1,4 +1,4 @@
-from parallelogram import Parallelogram
+from parallelogram import create3
 
 #base shape class, will define all 3d shape subclasses
 class base3D:
@@ -6,7 +6,7 @@ class base3D:
     def __init__(win,baseCenter,faces):
         self.win = win
         self.baseCenter = baseCenter
-        self.faces = []
+        self.faces = faces
 
     #returns enter of object
     def getCenter(self):
@@ -75,7 +75,7 @@ class base3D:
 class Prisim(base3D):
     def __init__(self,win,baseCenter,width,height,depth):
         #create base shape
-        base3D.__init__(win,baseCenter,Parallelogram.create3(baseCenter,width,height,90))
+        base3D.__init__(win,baseCenter,create3(depth,width,height,baseCenter))
 
     #returns a clone of the prisim
     def clone(self):
