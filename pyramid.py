@@ -36,7 +36,6 @@ def PyramidPoints(tip, height, baseSides, sideLength):
             leftPoints.append(Point(leftPoints[-1].getX()-np.cos(angle)*sideLength, leftPoints[-1].getY()+np.sin(angle)*sideLength))
             rightPoints.append(Point(rightPoints[-1].getX()+np.cos(angle)*sideLength, rightPoints[-1].getY()+np.sin(angle)*sideLength))
             angle = angle*2
-            print(np.degrees(angle))
     #return points and middle line
     leftPoints.reverse()
     return leftPoints+rightPoints,middle
@@ -54,17 +53,3 @@ def makePyramid(tip, height, baseSides, sideLength):
             faces.append(Polygon(tip,points[i],points[i+1]))
             faces.append(Polygon(tip,points[i],points[i+1]))
     return faces
-
-def main():
-    win = GraphWin('', 500, 500)
-    win.setCoords(0,0,10,10)
-
-    faces = drawPyramid(Point(5,8),5,4,2)
-    for face in faces:
-        face.draw(win)
-
-    win.getMouse()
-    win.close()
-
-if __name__ == '__main__':
-    main()

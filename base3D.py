@@ -1,5 +1,5 @@
 from parallelogram import create3
-from pyramid import makePyramid
+from pyramid import *
 
 #base shape class, will define all 3d shape subclasses
 class base3D:
@@ -32,7 +32,9 @@ class base3D:
     #rotate the object in 3D space
     def rotate(self,thetaX,thetaY,thetaZ):
         self.undrawLabel()
-        pass
+        for face in self.faces:
+            for point in face:
+                pass
 
     #draw shape to window
     def show(self):
@@ -91,14 +93,14 @@ class Prisim(base3D):
 
 #class to create a pyramid
 class Pyramid(base3D):
-    def __init__(self,win,tip,height,baseSides,baseSideLength):
+    def __init__(self,win,tip,height,baseSides,sideLength):
         self.win = win
         self.tip = tip
         self.height = height
         self.baseSides = baseSides
-        self.baseSideLength = baseSideLength
+        self.sideLength = sideLength
         #create base shape
-        base3D.__init__(self,self.win,makePryamid())
+        base3D.__init__(self,self.win,makePyramid(self.tip, self.height, self.baseSides, self.sideLength))
 
 #class to create a sphere
 class Sphere(base3D):

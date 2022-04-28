@@ -5,13 +5,13 @@ def main():
     win = GraphWin("Graphics3",500,500)
     win.setCoords(0,0,10,10)
 
-    cube = Prisim(win,Point(6,6),1,4,2)
-    cube.show()
-    win.getMouse()
-    cube.hide()
     pyramid = Pyramid(win,Point(6,6),5,5,2)
     pyramid.show()
+    pyramid.fill("blue")
     win.getMouse()
+    pyramid.translate(-1,1)
+    win.getMouse()
+    pyramid.drawLabel("Our Pyramid","red",20)
     win.close()
 
 
