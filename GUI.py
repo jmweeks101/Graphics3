@@ -8,6 +8,10 @@ def main():
     cube = Prisim(win,Point(6,6),1,4,2)
     cube.show()
     win.getMouse()
+    cube.hide()
+    pyramid = Pyramid(win,Point(6,6),5,5,2)
+    pyramid.show()
+    win.getMouse()
     win.close()
 
 
