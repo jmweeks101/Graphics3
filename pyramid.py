@@ -10,7 +10,7 @@ def PyramidPoints(tip, height, baseSides, sideLength):
     center = Point(tip.getX(), tip.getY()-height)
     #if the base shape has an even amount of sides...
     #find the angle from the center point to the next point
-    angle = np.radians(180-(((baseSides-2)*180)/baseSides))
+    angle = np.radians(180-(((baseSides-2)*180)/baseSides))/2
     if baseSides <= 4:
         angle = angle/2
         p1 = center
@@ -35,7 +35,7 @@ def PyramidPoints(tip, height, baseSides, sideLength):
             sideLength = sideLength/2
             leftPoints.append(Point(leftPoints[-1].getX()-np.cos(angle)*sideLength, leftPoints[-1].getY()+np.sin(angle)*sideLength))
             rightPoints.append(Point(rightPoints[-1].getX()+np.cos(angle)*sideLength, rightPoints[-1].getY()+np.sin(angle)*sideLength))
-            angle = angle*2
+            angle = angle*4
     #return points and middle line
     leftPoints.reverse()
     return leftPoints+rightPoints,middle

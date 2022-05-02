@@ -1,63 +1,60 @@
 from graphics import *
 from base3D import *
+import numpy as np
 
 def main():
-    win = GraphWin("Graphics3",500,500)
+    win = GraphWin("Graphics3",900,900)
     win.setCoords(0,0,10,10)
-    testPrisim(win)
-    win.close()
-
-def testPrisim(win):
-    cube = Prisim(win,Point(4,4),2,2,2)
+    cube = Prisim(win,Point(8,4),2,2,2)
     cube.show()
     win.getMouse()
-    #fill color
-    cube.fill("blue")
+    cube.rotate(np.radians(90),0,0)
     win.getMouse()
-    #move
-    cube.translate(-1,1)
+    win.close()
+
+def allPyramids(win):
+    win.setCoords(0,0,40,40)
+    shapes = []
+    labels = []
+    for i in range(12):
+        shapes.append(Pyramid(win,Point(((i%4)+1)*8,((i//4)+1)*12),8,i+3,2))
+        labels.append(Text(Point(((i%4)+1)*8,((i//4)+1)*12-10),i+3))
+    for i in range(12):
+        shapes[i].show()
+        labels[i].draw(win)
+    win.getMouse()
+    for shape in shapes:
+        shape.zoom(5)
+    win.getMouse()
+
+def testShape(win,shape):
+    win.setCoords(0,0,10,10)
+    shape.show()
+    win.getMouse()
+    # fill color
+    shape.fill("blue")
+    win.getMouse()
+    # move
+    shape.translate(-1,1)
     win.getMouse()
     #make label
-    cube.setLabel("Our cube","red",20,0,0)
-    cube.drawLabel()
+    shape.setLabel("Our shape","red",20,0,0)
+    shape.drawLabel()
     win.getMouse()
     #customize edges
-    cube.setEdgeColor("green")
-    cube.setEdgeSize(3)
+    shape.setEdgeColor("green")
+    shape.setEdgeSize(3)
     win.getMouse()
     #clone
-    cube2 = cube.clone()
-    cube2.translate(4,2)
+    cube2 = shape.clone()
+    cube2.translate(2,2)
     cube2.show()
     win.getMouse()
     #zoom
-    cube.zoom(2)
-    cube.setLabel("Our cube","red",20,0,0)
-    cube.drawLabel()
+    shape.zoom(2)
+    shape.setLabel("Our shape","red",20,0,0)
+    shape.drawLabel()
     win.getMouse()
-
-def testPyramid(win):
-    pyramid = Pyramid(win,Point(6,6),5,4,2)
-    pyramid.show()
-    win.getMouse()
-    #fill color
-    pyramid.fill("blue")
-    win.getMouse()
-    #move
-    pyramid.translate(-1,1)
-    win.getMouse()
-    #make label
-    pyramid.setLabel("Our Pyramid","red",20,0,2)
-    pyramid.drawLabel()
-    win.getMouse()
-    #customize edges
-    pyramid.setEdgeColor("red")
-    pyramid.setEdgeSize(3)
-    win.getMouse()
-    #hide
-    pyramid.hide()
-    win.getMouse()
-
 
 if __name__ == "__main__":
     main()
