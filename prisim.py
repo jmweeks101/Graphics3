@@ -29,37 +29,37 @@ def PrisimPoints(baseCenter,baseSides,height,width,depth,angle):
     basePoints = BasePoints(baseCenter,baseSides,height,width)
     #add the base to faces
     faces.append(Polygon(basePoints))
-    #find what the center of the back face would be
-    backCenter = Point(baseCenter.getX()+depth*np.cos(angle),baseCenter.getY()+depth*np.sin(angle))
-    #find which point of the base is closest to this back point
-    dist = []
-    for point in basePoints:
-        x1 = point.getX()
-        x2 = backCenter.getX()
-        y1 = point.getY()
-        y2 = backCenter.getY()
-        dist.append(np.sqrt((x1-x2)**2+(y1-y2)**2))
-    print(dist)
-    distSort = dist.copy()
-    distSort.sort(reverse = True)
-    #use the cloest point and the adjust points to it on the base to make the side faces
-    for i in range(baseSides):
-        if distSort.index(dist[i]) >= math.floor(baseSides/2):
-            p1 = basePoints[i]
-            if i+1 > len(basePoints)-1:
-                p2 = basePoints[0]
-            else:
-                p2 = basePoints[i+1]
-            faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(angle),p2.getY()+depth*np.sin(angle)),Point(p1.getX()+depth*np.cos(angle),p1.getY()+depth*np.sin(angle))))
+    #dictionary for points that will be used to make faces
+    #work your way around the shape from there, clockwise
+    #dictionaries will differ for even and odd sided base shapes
+    quadOdd = {0:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1)),
+               1:list(range(int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1,-1))+list(range(baseSides-1,baseSides-int(math.floor((baseSides+3)/8))-1,-1)),
+               2:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1)),
+               3:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1))}
+    quadEven = {0:[],1:[],2:[],3:[]}
+    if baseSides % 2 == 0:
+        points = quadEven[angle//np.radians(90)]
+    else:
+        points = quadOdd[angle//np.radians(90)]
+    print(points)
+    for i in range(len(points)-1):
+        p1 = basePoints[points[i]]
+        p2 = basePoints[points[i+1]]
+        faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(angle),p2.getY()+depth*np.sin(angle)),Point(p1.getX()+depth*np.cos(angle),p1.getY()+depth*np.sin(angle))))
     return faces
 
 def test():
     win = GraphWin("",500,500)
     win.setCoords(0,0,10,10)
-    faces = PrisimPoints(Point(5,5),7,2,2,3,np.radians(45))
-    for face in faces:
-        face.draw(win)
-    win.getMouse()
+    while True:
+        sides = int(input("Base Sides: "))
+        angle = int(input("Angle: "))
+        faces = PrisimPoints(Point(5,5),sides,4,4,3,np.radians(angle))
+        for face in faces:
+            face.draw(win)
+        win.getMouse()
+        for face in faces:
+            face.undraw()
     win.close()
 
 test()
