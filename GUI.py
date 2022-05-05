@@ -4,9 +4,9 @@ import numpy as np
 
 def main():
     win = GraphWin("Graphics3",900,900)
-    win.setCoords(0,0,10,10)
     cube = Prisim(win,Point(4,4),5,2,2,2,45)
-    cube.show()
+    pyr = Pyramid(win,Point(5,8),6,5,2)
+    testShape(win,cube)
     win.getMouse()
     win.close()
 
@@ -50,8 +50,11 @@ def testShape(win,shape):
     win.getMouse()
     #zoom
     shape.zoom(2)
-    shape.setLabel("Our shape","red",20,0,0)
-    shape.drawLabel()
+    win.getMouse()
+    shape.zoom(-1)
+    win.getMouse()
+    #rotate
+    shape.rotate(45,Point(5,5))
     win.getMouse()
 
 if __name__ == "__main__":
