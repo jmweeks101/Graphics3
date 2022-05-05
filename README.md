@@ -1,6 +1,7 @@
 # Graphics3
-3D graphics package based off John Zelle's grahpics.py package
-This is a work in progress
+3D graphics package based off John Zelle's grahpics.py package.
+We have allowed the user to create spheres, prisms, and pyramids, as well as
+allowing them to perform various attribute changes to them (such as fill, zoom, etc.)
 
 # Installation
-This is still a work in progress
+Use the setup.py file to install the package.
