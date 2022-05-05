@@ -29,24 +29,56 @@ def PrisimPoints(baseCenter,baseSides,height,width,depth,angle):
     basePoints = BasePoints(baseCenter,baseSides,height,width)
     #add the base to faces
     faces.append(Polygon(basePoints))
-    #dictionary for points that will be used to make faces
-    #work your way around the shape from there, clockwise
-    #dictionaries will differ for even and odd sided base shapes
-    quadOdd = {0:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1)),
-               1:list(range(int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1,-1))+list(range(baseSides-1,baseSides-int(math.floor((baseSides+3)/8))-1,-1)),
-               2:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1)),
-               3:list(range(int(math.floor((baseSides+3)/8)),-1,-1))+list(range(baseSides-1,int((math.floor((baseSides-3)/6)+(baseSides-3)/2+2))-1,-1))}
-    quadEven = {0:[],1:[],2:[],3:[]}
-    if baseSides % 2 == 0:
-        points = quadEven[angle//np.radians(90)]
-    else:
-        points = quadOdd[angle//np.radians(90)]
-    print(points)
-    for i in range(len(points)-1):
-        p1 = basePoints[points[i]]
-        p2 = basePoints[points[i+1]]
-        faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(angle),p2.getY()+depth*np.sin(angle)),Point(p1.getX()+depth*np.cos(angle),p1.getY()+depth*np.sin(angle))))
+    #find reference point from back base
+    ref = Point(baseCenter.getX()+depth*np.cos(np.radians(angle)),baseCenter.getY()+depth*np.sin(np.radians(angle)))
+    #find start points on base
+    l,h = findHiLo(angle,baseSides,basePoints)
+    print(l,h)
+    #add first side face
+    p1 = basePoints[h]
+    p2 = basePoints[l]
+    faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(np.radians(angle)),p2.getY()+depth*np.sin(np.radians(angle))),Point(p1.getX()+depth*np.cos(np.radians(angle)),p1.getY()+depth*np.sin(np.radians(angle)))))
+    #starting from the low point, go around the base clockwise making faces, until the next face would be concaved
+    while True:
+        p1 = basePoints[l]
+        p2 = basePoints[l-1]
+        faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(np.radians(angle)),p2.getY()+depth*np.sin(np.radians(angle))),Point(p1.getX()+depth*np.cos(np.radians(angle)),p1.getY()+depth*np.sin(np.radians(angle)))))
+        l -= 1
+        if abs(basePoints[l].getY()-basePoints[l-1].getY())<(np.tan(np.radians(angle))*abs(basePoints[l].getX()-basePoints[l-1].getX())):
+            break
+    #starting from the high point, go around the base counter-clcokwise making faces, until the next face would concave
+    while True:
+        p1 = basePoints[h]
+        if h>=baseSides-1:
+            p2 = basePoints[0]
+        else:
+            p2 = basePoints[h+1]
+        faces.append(Polygon(p1,p2,Point(p2.getX()+depth*np.cos(np.radians(angle)),p2.getY()+depth*np.sin(np.radians(angle))),Point(p1.getX()+depth*np.cos(np.radians(angle)),p1.getY()+depth*np.sin(np.radians(angle)))))
+        if h==baseSides-1:
+            h = 0
+        else:
+            h += 1
+        if h>=baseSides-1:
+            if abs(basePoints[h].getY()-basePoints[0].getY())>(np.tan(np.radians(angle))*abs(basePoints[h].getX()-basePoints[0].getX())):
+                break
+        else:
+            if abs(basePoints[h].getY()-basePoints[h+1].getY())>(np.tan(np.radians(angle))*abs(basePoints[h].getX()-basePoints[h+1].getX())):
+                break
     return faces
+
+def findHiLo(angle,baseSides,basePoints):
+    #find two starting points from base
+    if angle>90:
+        theta = angle-90
+    else:
+        theta = 360-angle
+    j = math.floor(theta/(180-(baseSides-2)*180/baseSides))
+    low = j
+    if j==baseSides-1:
+        high = 0
+    else:
+        high = j+1
+    return low,high
 
 def test():
     win = GraphWin("",500,500)
@@ -54,7 +86,7 @@ def test():
     while True:
         sides = int(input("Base Sides: "))
         angle = int(input("Angle: "))
-        faces = PrisimPoints(Point(5,5),sides,4,4,3,np.radians(angle))
+        faces = PrisimPoints(Point(5,5),sides,4.5,4.5,3,angle)
         for face in faces:
             face.draw(win)
         win.getMouse()
