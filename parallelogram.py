@@ -37,11 +37,12 @@ class Parallelogram(GraphicsObject):
         args.append(options)
         return GraphWin.create_polygon(*args)
 
-    def create3(self):
-        frontface = Parallelogram(Point(5,5), l, w, 90)
-        topface = Parallelogram(Point(test.p3.x+(w/2), test.p3.y+(np.sin(np.radians(27.5))*l/2)), np.sin(np.radians(27.5))*l, w, 45)
-        sideface = Polygon(test.p2, Point(test2.p4.x, test.p2.y+test2.p4.y-test.p4.y), test2.p4, test.p4)
-        return [frontface, topface, sideface]
+def create3(l, w, h, center):
+    #Creates 3 parallelograms that form a 3D prism
+    frontface = Parallelogram(center, l, w, 90)
+    topface = Parallelogram(Point(frontface.p3.x+(w/2), frontface.p3.y+(np.sin(np.radians(27.5))*l/2)), np.sin(np.radians(27.5))*l, w, 45)
+    sideface = Polygon(frontface.p2, Point(topface.p4.x, frontface.p2.y+topface.p4.y-frontface.p4.y), topface.p4, frontface.p4)
+    return [frontface, topface, sideface]
 
 
 def main():
@@ -49,10 +50,9 @@ def main():
     win.setBackground('white')
     win.setCoords(0,0,10,10)
 
-    test = Parallelogram(Point(3,5), 2, 4, 90)
-    test.draw(win)
-    test.setFill('black')
-
+    faces = create3(2,2,2, Point(5,5))
+    for face in faces:
+        face.draw(win)
     win.getMouse()
 
 
