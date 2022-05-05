@@ -47,14 +47,14 @@ Copyright (c) 2022--, Josh Weeks
 
 NAME = "Graphics3"
 MAINTAINER = "Josh Weeks"
-MAINTAINER_EMAIL = "joshmiller5472@gmail.com"
+MAINTAINER_EMAIL = "joshua.weeks@students.nsc.edu"
 DESCRIPTION = description
 LONG_DESCRIPTION = long_description
 URL = "http://github.com/jmweeks101/Graphics3"
 DOWNLOAD_URL = ""
 LICENSE = "MIT"
 AUTHOR = "Josh Weeks"
-AUTHOR_EMAIL = "joshmiller5472@gmail.com"
+AUTHOR_EMAIL = "joshua.weeks@students.nsc.edu"
 PLATFORMS = "OS Independent"
 MAJOR = _version_major
 MINOR = _version_minor
