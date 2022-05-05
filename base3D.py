@@ -1,4 +1,5 @@
 from parallelogram import create3
+from prisim import PrisimFaces
 from pyramid import *
 import numpy as np
 
@@ -102,14 +103,21 @@ class base3D:
 
 #class to create a prisim
 class Prisim(base3D):
-    def __init__(self,win,baseCenter,height,width,depth):
+    def __init__(self,win,baseCenter,baseSides,height,width,depth,angle):
         self.win = win
         self.baseCenter = baseCenter
+        self.baseSides = baseSides
         self.width = width
         self.height = height
         self.depth = depth
+        if angle < 0:
+            angle = abs(angle)
+            if angle >= 360:
+                self.angle = angle % 360
+            else:
+                self.angle = angle
         #create base shape
-        base3D.__init__(self,self.win,create3(self.depth,self.width,self.height,self.baseCenter))
+        base3D.__init__(self,self.win,PrisimFaces(self.baseCenter,self.baseSides,self.height,self.width,self.depth,self.angle))
 
     #returns a clone of the prisim
     def clone(self):

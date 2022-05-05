@@ -5,10 +5,8 @@ import numpy as np
 def main():
     win = GraphWin("Graphics3",900,900)
     win.setCoords(0,0,10,10)
-    cube = Prisim(win,Point(8,4),2,2,2)
+    cube = Prisim(win,Point(4,4),5,2,2,2,45)
     cube.show()
-    win.getMouse()
-    cube.rotate(np.radians(90),0,0)
     win.getMouse()
     win.close()
 
