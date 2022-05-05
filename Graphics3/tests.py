@@ -4,6 +4,7 @@
 from graphics import *
 from base3D import *
 import numpy as np
+from sphere import *
 
 def testShape(win,shape):
     shape.show()
@@ -32,12 +33,21 @@ def testShape(win,shape):
     shape.setLabel("Our shape","red",20,0,0)
     shape.drawLabel()
     win.getMouse()
+    shape.hide()
+    cube2.hide()
 
 def main():
     win = GraphWin("Graphics3",900,900)
     win.setCoords(0,0,10,10)
-    prism = Prisim(win,Point(4,4),5,2,2,2,45)
-    testShape(win, prism)
+    testShape(win, Prisim(win,Point(4,4),5,2,2,2,45))
+    testShape(win, Pyramid(win, Point(6,6), 4, 4, 2))
+    sphere = Sphere(win, Point(7,7), 1, [100,100,100], side='left')
+    sphere2 = Sphere(win, Point(3,3), 1, [100,100,100])
+    sphere.createSphere()
+    sphere2.createSphere()
+    win.getMouse()
+
+
 
 if __name__ == "__main__":
     main()
