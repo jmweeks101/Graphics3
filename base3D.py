@@ -1,6 +1,6 @@
-from parallelogram import create3
 from prisim import PrisimFaces
 from pyramid import *
+from sphere import Sphere
 import numpy as np
 
 #base shape class, will define all 3d shape subclasses
@@ -101,6 +101,42 @@ class base3D:
         except:
             pass
 
+    #rotate the object in 3D space
+    def rotate(self,angle,anchor):
+        self.hide()
+        self.undrawLabel()
+        #rotation matrix
+        matrix = np.array([[np.cos(angle),-np.sin(angle)],
+                          [np.sin(angle),np.cos(angle)]])
+        anchorX = anchor.getX()
+        anchorY = anchor.getY()
+        #saved new rotated faces to a new list
+        faces2 = []
+        for face in self.faces:
+            points2 = []
+            for point in face.getPoints():
+                p = np.array([[point.getX()-anchorX],
+                             [point.getY()-anchorY]])
+                x = np.matmul(matrix,p)
+                points2.append(Point(x[0]+anchorX,x[1]+anchorY))
+            faces2.append(Polygon(points2))
+        self.faces = faces2
+        #add back original customizations if any were present
+        try:
+            self.fill(self.fillColor)
+        except:
+            pass
+        try:
+            self.setEdgeSize(self.edgeSize)
+        except:
+            pass
+        try:
+            self.setEdgeColor(self.edgeColor)
+        except:
+            pass
+        self.show()
+        self.updatePoints()
+
 #class to create a prisim
 class Prisim(base3D):
     def __init__(self,win,baseCenter,baseSides,height,width,depth,angle):
@@ -112,6 +148,7 @@ class Prisim(base3D):
         self.depth = depth
         if angle < 0:
             angle = abs(angle)
+        else:
             if angle >= 360:
                 self.angle = angle % 360
             else:
@@ -121,44 +158,22 @@ class Prisim(base3D):
 
     #returns a clone of the prisim
     def clone(self):
-        return Prisim(self.win,self.baseCenter,self.height,self.width,self.depth)
+        return Prisim(self.win,self.baseCenter,self.baseSides,self.height,self.width,self.depth,self.angle)
 
     #translate shape in x,y direction
     def translate(self,x,y):
         self.undrawLabel()
         for face in self.faces:
             face.move(x,y)
+        self.baseCenter = Point(self.baseCenter.getX()+x,self.baseCenter.getY()+y)
         self.updatePoints()
 
     #makes pbject apear closer or further away(shrink or grow shape)
     def zoom(self,z):
         self.undrawLabel()
-        #find the current center and undraw current shape
-        center = self.getCenter()
         self.hide()
         #list to store new faces
-        faces2 = []
-        for face in self.faces:
-            #find each point in the face
-            points = face.getPoints()
-            points2 = []
-            for point in points:
-                #for each point in each face, find the relative position to the center in x and y
-                if point.getX()-center.getX()>0:
-                    x = 1
-                else:
-                    x = -1
-                if point.getY()-center.getY()>0:
-                    y = 1
-                else:
-                    y = -1
-                #create a new point that is n distance from the original point
-                #distance n is calculated by using given scale amount (z) as a diagnol distance from the point, away from the center
-                points2.append(Point(point.getX()+z*np.cos(np.radians(45))*x,point.getY()+z*np.sin(np.radians(45))*y))
-            #new points are formed into new faces and saved to self.faces
-            faces2.append(Polygon(points2))
-        #save new faces to self.faces
-        self.faces = faces2
+        self.faces = PrisimFaces(self.baseCenter,self.baseSides,self.height+z/2,self.width+z/2,self.width+z/2,self.angle)
         #add back original customizations if any were present
         try:
             self.fill(self.fillColor)
@@ -195,7 +210,7 @@ class Pyramid(base3D):
         self.undrawLabel()
         for face in self.faces:
             face.move(x,y)
-        self.tip.move(x,y)
+        self.tip = Point(self.tip.getX()+x,self.tip.getY()+y)
         self.updatePoints()
 
     #makes object apear closer or further away(shrink or grow shape)
@@ -226,49 +241,3 @@ class Pyramid(base3D):
         except:
             pass
         self.updatePoints()
-
-    #rotate the object in 3D space
-    def rotate(self,angleX,angleY,angleZ):
-        self.hide()
-        angleX = angleX/2
-        angleY = angleY/2
-        angleZ = angleZ/2
-        #rotation matrix X
-        matrixX = np.array([[1,         0,             0      ],
-                            [0, np.cos(angleX), np.sin(angleX)],
-                            [0, -np.sin(angleX), np.cos(angleX)]])
-        #rotation matrix Y
-        matrixY = np.array([[np.cos(angleY), 0, -np.sin(angleY)],
-                            [0,              1,        0       ],
-                            [np.sin(angleY), 0, np.cos(angleY)]])
-        #rotation matrix Z
-        matrixZ = np.array([[np.cos(angleZ), np.sin(angleZ), 0 ],
-                            [-np.sin(angleZ),np.cos(angleZ), 0 ],
-                            [      0        ,      0      ,  1 ]])
-        #function to rotate in a single direction
-        def rotate1(faces,angle,matrix):
-            #list to save new rotated faces
-            faces2 = []
-            for face in faces:
-                points = face.getPoints()
-                points2 = []
-                for point in points:
-                    #save face points in a matrix
-                    pointMatrix = np.array([point.getX(),point.getY()])
-                    product = np.matmul(pointMatrix,matrix)
-                    points2.append(Point(product[0],product[1]))
-                faces2.append(Polygon(points2))
-            return faces2
-        #rotate in each direction
-        if angleX is not 0:
-            self.faces = rotate1(self.faces,angleX,matrixX)
-        if angleY is not 0:
-            self.faces = rotate1(self.faces,angleY,matrixY)
-        if angleZ is not 0:
-            self.faces = rotate1(self.faces,angleZ,matrixZ)
-        #draw new shape
-        self.show()
-#class to create a sphere
-class Sphere(base3D):
-    def __init__(self):
-        pass
