@@ -6,7 +6,13 @@ from base3D import *
 import numpy as np
 from sphere import *
 
-def testShape(win,shape,label):
+def testShape(win,shape,label,type):
+    label.setText("Click anywhere to begin")
+    win.getMouse()
+    if type=="Prisim":
+        label.setText("Create your shape using: \nshape = Prisim(window, base center point, base sides, height, width, depth, angle)")
+    else:
+        label.setText("Create your shape using: \nshape = Pyramid(win, apex point, height, base sides, base side lengths)")
     shape.show()
     win.getMouse()
     # fill color
@@ -52,15 +58,14 @@ def main():
     label = Text(Point(5,9),"")
     label.setSize(24)
     label.draw(win)
-    testShape(win, Prisim(win,Point(4,4),5,2,2,2,45), label)
-    testShape(win, Pyramid(win, Point(6,6), 4, 5, 2), label)
+    testShape(win, Prisim(win,Point(4,4),5,2,2,2,45), label,"Prisim")
+    testShape(win, Pyramid(win, Point(6,6), 4, 5, 2), label,"Pyramid")
     label.setText("Create spheres with the sphere object:")
     sphere = Sphere(win, Point(7,7), 1, [100,100,100], side='left')
     sphere2 = Sphere(win, Point(3,3), 1, [100,100,100])
     sphere.createSphere()
     sphere2.createSphere()
     win.getMouse()
-
 
 
 if __name__ == "__main__":
